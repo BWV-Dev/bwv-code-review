@@ -6,6 +6,7 @@
 - [3. Comment](#3-comment)
 - [4. Usage](#4-usage)
 - [5. Security](#5-security)
+- [6. Clean Code & Architecture Principles](#6-clean-code--architecture-principles)
 
 ---
 
@@ -116,7 +117,7 @@
   ```
 
 ### [TS-NAMING-010] Avoid keyword collisions
-- **Severity**: 
+- **Severity**: REQUIRED
 - **Description**: Do not use variable names that clash with language keywords (e.g., class, print, break).
 - **Examples**:
   ```typescript
@@ -167,23 +168,7 @@
   function calculate(price: number, discount: number): number { ... }
   ```
 
-### [TS-STYLE-003] Indentation (2 Spaces)
-- **Severity**: REQUIRED
-- **Description**: Description: Use 2 spaces for indentation (configured via .editorconfig or Prettier).
-- **Examples**:
-  ```typescript
-  // Bad
-  function multiplyNumbers(a: number, b: number): number {
-      return a * b;
-  }
-
-  // Good
-  function multiplyNumbers(a: number, b: number): number {
-    return a * b;
-  }
-  ```
-
-### [TS-STYLE-004] Async/Await over Callbacks
+### [TS-STYLE-003] Async/Await over Callbacks
 - **Severity**: REQUIRED
 - **Description**: Avoid callback hell. Use async/await syntax.
 - **Examples**:
@@ -196,7 +181,7 @@
   const data = await res.json();
   ```
 
-### [TS-STYLE-005] Defensive Programming (Null Checks)
+### [TS-STYLE-004] Defensive Programming (Null Checks)
 - **Severity**: REQUIRED
 - **Description**: Always check for null/undefined. Use Optional Chaining (?.) where possible.
 - **Examples**:
@@ -208,7 +193,7 @@
   console.log(user?.address?.city);
   ```
 
-### [TS-STYLE-006] Use Interfaces for Object Shapes
+### [TS-STYLE-005] Use Interfaces for Object Shapes
 - **Severity**: RECOMMENDED
 - **Description**: Define object structures using interface.
 - **Examples**:
@@ -375,3 +360,40 @@
   ```typescript
   const hash = await bcrypt.hash(password, salt);
   ```
+
+## 6. Clean Code & Architecture Principles
+
+### Instructions for AI
+Focus heavily on these principles during review. Prioritize readability and maintainability over cleverness.
+
+- **[CLEAN-DRY] Don't Repeat Yourself**:
+  - Detect duplicated logic across files or functions.
+  - Suggest extracting repeated code into reusable utility functions or hooks.
+
+- **[CLEAN-KISS] Keep It Simple**:
+  - Flag over-engineered solutions (e.g., using `reduce` where `map` suffices, complex regex where string methods work).
+  - Suggest the simplest implementation possible.
+
+- **[CLEAN-YAGNI] You Aren't Gonna Need It**:
+  - Strict check on unused parameters, dead code, or "future-proofing" features that are not currently used.
+  - Suggest removing fields in Classes/Interfaces that serve no immediate purpose.
+
+- **[CLEAN-SRP] Single Responsibility Principle**:
+  - **Severity: REQUIRED**.
+  - A function must do only one thing. If a function name has "And" (e.g., `validateAndSave`), suggest splitting it.
+  - Separate Business Logic from UI/View Logic.
+
+- **[CLEAN-FUNC-SIZE] Function Complexity**:
+  - **Severity: REQUIRED**.
+  - Instead of strictly counting lines, flag functions that are intellectually difficult to scan.
+  - Suggest breaking down long functions (>20 lines) into sub-routines with descriptive names.
+
+- **[CLEAN-PARAMS] Parameter Object Pattern**:
+  - **Severity: REQUIRED**.
+  - Functions with >3 arguments MUST be refactored to use an Interface/Object Destructuring.
+  - Ex: `fn(a, b, c, d)` -> `fn({ a, b, c, d })`.
+
+- **[CLEAN-NESTING] Early Return / Guard Clauses**:
+  - **Severity: RECOMMENDED**.
+  - Flatten deep nesting (>3 levels).
+  - Suggest inverting `if` statements to return early (Guard Clauses) instead of wrapping logic in big `else` blocks.
