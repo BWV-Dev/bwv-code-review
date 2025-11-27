@@ -34,9 +34,11 @@ CodeRabbit is a supporting tool — the final decision always belongs to the rev
 
 ### 2.3 Rules for Members
 
+- **Always** use CodeRabbit to review code locally before pushing (using the VSCode or Cursor extension).
 - **Must** carefully verify code before pushing (hard-coded credentials, sensitive configs, etc.).
+- All the rules in CODING_STANDARDS.md must be satisfied before creating a PR.
 - **Should not** modify code solely based on CodeRabbit's suggestions unless approved by the reviewer.
-- May ask questions directly to CodeRabbit, but **must not** provide incorrect or misleading information about the project or coding rules — doing so will cause inaccurate reviews later.
+- May ask questions directly to CodeRabbit, but **always provide accurate information** about the project and coding rules. If you give wrong information (e.g., saying "we use snake_case" when the team uses camelCase), CodeRabbit will learn this mistake and give incorrect suggestions in future reviews.
 
 ### 2.4 Rules for Reviewers
 
@@ -51,7 +53,7 @@ CodeRabbit is a supporting tool — the final decision always belongs to the rev
 
 ```mermaid
 graph TD
-    A["Member creates Pull Request<br/>- Assigns Reviewer"] --> B["Member adds 'ai-review' tag<br/>(or another predefined tag)"]
+    A["Member creates Pull Request<br/>- Assigns Reviewer"] --> B["Member adds 'coderabbit-review' label<br/>(or another predefined label)"]
     B --> C["Run AI Review<br/>Wait for CodeRabbit to analyze"]
     
     C --> D["Reviewer reads CodeRabbit's output"]
@@ -71,4 +73,21 @@ graph TD
     H --> H1{"Meets requirements?"}
     H1 -->|No| F
     H1 -->|Yes| I["Reviewer Approve & Merge"]
+
+    %% Member nodes (green)
+    style A fill:#A7F3D0,stroke:#059669,stroke-width:1px
+    style B fill:#A7F3D0,stroke:#059669,stroke-width:1px
+    style D2 fill:#A7F3D0,stroke:#059669,stroke-width:1px
+    style G fill:#A7F3D0,stroke:#059669,stroke-width:1px
+
+    %% Reviewer/Leader nodes (yellow)
+    style C fill:#FDE68A,stroke:#D97706,stroke-width:1px
+    style D fill:#FDE68A,stroke:#D97706,stroke-width:1px
+    style D1 fill:#FDE68A,stroke:#D97706,stroke-width:1px
+    style D3 fill:#FDE68A,stroke:#D97706,stroke-width:1px
+    style E fill:#FDE68A,stroke:#D97706,stroke-width:1px
+    style F fill:#FDE68A,stroke:#D97706,stroke-width:1px
+    style H fill:#FDE68A,stroke:#D97706,stroke-width:1px
+    style H1 fill:#FDE68A,stroke:#D97706,stroke-width:1px
+    style I fill:#FDE68A,stroke:#D97706,stroke-width:1px
 ```
