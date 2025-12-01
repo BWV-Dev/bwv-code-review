@@ -1,15 +1,15 @@
-language: "vi-VN"
+language: "en-US"
 tone_instructions: "Keep reviews concise and prioritize critical issues. Skip pleasantries and go directly to the findings. Strictly adhere to the established coding standards."
 early_access: false
 enable_free_tier: true
 
 reviews:
   profile: "assertive"
-  request_changes_workflow: false
-  high_level_summary: false
+  request_changes_workflow: true
+  high_level_summary: true
   high_level_summary_placeholder: ""
-  high_level_summary_in_walkthrough: false
-  auto_title_placeholder: "@coderabbitreview"
+  high_level_summary_in_walkthrough: true
+  auto_title_placeholder: "@coderabbitai"
   auto_title_instructions: ""
   review_status: true
   commit_status: true
@@ -17,7 +17,7 @@ reviews:
   collapse_walkthrough: false
   changed_files_summary: true
   sequence_diagrams: false
-  estimate_code_review_effort: false
+  estimate_code_review_effort: true
   assess_linked_issues: false
   related_issues: false
   related_prs: true
@@ -37,12 +37,15 @@ reviews:
   path_instructions:
     - path: "**/*.php"
       instructions: |
-        Kiểm tra code PHP theo TẤT CẢ các quy tắc trong "CODING_STANDARDS.md".
-        Yêu cầu:
-        1. Kiểm tra MỌI dòng code, không bỏ sót vi phạm nào
-        2. Ghi rõ số dòng bị vi phạm
-        3. Đưa ra gợi ý sửa code cụ thể
-        4. Ưu tiên các quy tắc CRITICAL và REQUIRED trước
+        Check PHP code according to ALL rules in "CODING_STANDARDS.md".
+        Requirements:
+          1. Check EVERY line of code, do not miss any violations
+          2. Clearly specify the line numbers of violations
+          3. Provide specific code fix suggestions
+          4. Prioritize CRITICAL and REQUIRED rules first
+        When a standards violation is found, you MUST include the Rule ID at the beginning of the response.
+        Format: "[RULE-ID] <Rule Name>: <Explanation>"
+        Example: [TS-NAMING-001] CamelCase: Variables/functions must be `camelCase`.
   abort_on_close: true
   disable_cache: false
   auto_review:
@@ -51,15 +54,13 @@ reviews:
     ignore_title_keywords: []
     drafts: false
     base_branches:
-      - main
-      - master
       - develop
     labels:
-      - "auto-review"
+      - coderabbit-review
     ignore_usernames: []
   finishing_touches:
     docstrings:
-      enabled: true
+      enabled: false
     unit_tests:
       enabled: false
   pre_merge_checks:
@@ -67,104 +68,103 @@ reviews:
       mode: "off"
       threshold: 80
     title:
-      mode: "warning"
+      mode: "error"
       requirements: "Title should start with a verb, be syntactically correct, and ideally be under 50 characters"
     description:
       mode: "off"
     issue_assessment:
       mode: "warning"
     custom_checks: []
-  # tools:
-  #   github-checks:
-  #     enabled: false
-  #     timeout_ms: 90000
-  #   languagetool:
-  #     enabled: false
-  #     enabled_rules: []
-  #     disabled_rules: []
-  #     enabled_categories: []
-  #     disabled_categories: []
-  #     enabled_only: false
-  #     level: "default"
-  #   ast-grep:
-  #     rule_dirs:
-  #       - rules
-  #     util_dirs: []
-  #     essential_rules: false
-  #     packages: []
-  #   golangci-lint:
-  #     enabled: false
-  #   phpstan:
-  #     enabled: false
-  #     level: "8"
-  #   swiftlint:
-  #     enabled: false
-  #   detekt:
-  #     enabled: false
-  #   pmd:
-  #     enabled: false
-  #   semgrep:
-  #     enabled: false
-  #   shellcheck:
-  #     enabled: false
-  #   ruff:
-  #     enabled: false
-  #   markdownlint:
-  #     enabled: false
-  #   biome:
-  #     enabled: false
-  #   hadolint:
-  #     enabled: false
-  #   phpmd:
-  #     enabled: false
-  #   phpcs:
-  #     enabled: false
-  #   yamllint:
-  #     enabled: false
-  #   gitleaks:
-  #     enabled: false
-  #   checkov:
-  #     enabled: false
-  #   eslint:
-  #     enabled: false
-  #   flake8:
-  #     enabled: false
-  #   rubocop:
-  #     enabled: false
-  #   buf:
-  #     enabled: false
-  #   regal:
-  #     enabled: false
-  #   actionlint:
-  #     enabled: false
-  #   cppcheck:
-  #     enabled: false
-  #   circleci:
-  #     enabled: false
-  #   clippy:
-  #     enabled: false
-  #   sqlfluff:
-  #     enabled: false
-  #   prismaLint:
-  #     enabled: false
-  #   pylint:
-  #     enabled: false
-  #   oxc:
-  #     enabled: false
-  #   shopifyThemeCheck:
-  #     enabled: false
-  #   luacheck:
-  #     enabled: false
-  #   brakeman:
-  #     enabled: false
-  #   dotenvLint:
-  #     enabled: false
-  #   htmlhint:
-  #     enabled: false
-  #   checkmake:
-  #     enabled: false
-  #   osvScanner:
-  #     enabled: false
+  tools:
+    github-checks:
+      enabled: true
+      timeout_ms: 90000
+    languagetool:
+      enabled: true
+      enabled_rules: []
+      disabled_rules: []
+      enabled_categories: []
+      disabled_categories: []
+      enabled_only: false
+      level: "default"
+    ast-grep:
+      rule_dirs: []
+      util_dirs: []
+      essential_rules: true
+      packages: []
+    golangci-lint:
+      enabled: false
+    phpstan:
+      enabled: true
+      level: "8"
+    swiftlint:
+      enabled: false
+    detekt:
+      enabled: false
+    pmd:
+      enabled: false
+    semgrep:
+      enabled: true
+    shellcheck:
+      enabled: true
+    ruff:
+      enabled: false
+    markdownlint:
+      enabled: true
+    biome:
+      enabled: true
+    hadolint:
+      enabled: true
+    phpmd:
+      enabled: true
+    phpcs:
+      enabled: true
+    yamllint:
+      enabled: true
+    gitleaks:
+      enabled: true
+    checkov:
+      enabled: true
+    eslint:
+      enabled: true
+    flake8:
+      enabled: false
+    rubocop:
+      enabled: false
+    buf:
+      enabled: false
+    regal:
+      enabled: false
+    actionlint:
+      enabled: true
+    cppcheck:
+      enabled: false
+    circleci:
+      enabled: true
+    clippy:
+      enabled: false
+    sqlfluff:
+      enabled: false
+    prismaLint:
+      enabled: false
+    pylint:
+      enabled: false
+    oxc:
+      enabled: true
+    shopifyThemeCheck:
+      enabled: false
+    luacheck:
+      enabled: true
+    brakeman:
+      enabled: false
+    dotenvLint:
+      enabled: true
+    htmlhint:
+      enabled: true
+    checkmake:
+      enabled: true
+    osvScanner:
+      enabled: true
 
 chat:
   art: false
@@ -179,7 +179,7 @@ knowledge_base:
     enabled: true
     filePatterns:
       - "**/.cursorrules"
-      - "CODING_STANDARDS.md"
+      - "**/CODING_STANDARDS.md"
   learnings:
     scope: "auto"
   issues:

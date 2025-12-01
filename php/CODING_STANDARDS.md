@@ -6,6 +6,7 @@
 - [3. Comments](#3-comments)
 - [4. Usage](#4-usage)
 - [5. Security](#5-security)
+- [6. Clean Code & Architecture Principles](#6-clean-code--architecture-principles)
 
 ---
 
@@ -17,30 +18,10 @@
 - **Examples**:
   ```php
   // Good
-  // UserController.php
-
-  namespace App\Http\Controllers;
-
-  class UserController
-  {
-      // ...
-  }
-
-  interface Rule
-  {
-      // ...
-  }
-
-  enum UserType
-  {
-      case Admin;
-      case Support;
-  }
-
-  trait CommonTrait
-  {
-      // ...
-  }
+  class UserController {}
+  interface Rule {}
+  enum UserType { case Admin; }
+  trait CommonTrait {}
   ```
 
 ### [PHP-NAMING-002] Functions, Properties and Variables
@@ -110,34 +91,23 @@
   // Good
   class Example
   {
-      use BarTrait;
-      use BazTrait;
+      use SomeTrait;
 
-      public const PUBLIC_CONSTANT = 1;
-      protected const PROTECTED_CONSTANT = 2;
-      private const PRIVATE_CONSTANT = 2;
+      public const MAX_VALUE = 100;
+      private const MIN_VALUE = 1;
 
-      public $pubicProperty;
-      protected $protectedProperty;
-      private $privateProperty;
+      public $name;
+      private $id;
 
       public function __construct() {}
 
-      public function __destruct() {}
-
       public function __toString() {}
 
-      public function pubicFunction() {}
+      public function getName() {}
 
-      public static function pubicStaticFunction() {}
+      protected function validate() {}
 
-      protected function protectedFunction() {}
-
-      protected static function protectedStaticFunction() {}
-
-      private function privateFunction() {}
-
-      private static function privateStaticFunction() {}
+      private function process() {}
   }
   ```
 
@@ -192,10 +162,8 @@
   ```php
   // Good
   $foo = [
-      'bar' => [
-          'baz' => true,
-          'baq' => true,
-      ],
+      'bar' => true,
+      'baz' => false,
   ];
 
   foo(
@@ -203,17 +171,9 @@
       'baz',
   );
 
-  function foo(
-      $x,
-      $y,
-  ) {
+  function foo($x, $y,) {
       // ...
   }
-
-  $returnValue = match ($food) {
-      'apple' => 'This food is an apple',
-      'bar' => 'This food is a bar',
-  };
   ```
 
 ### [PHP-STYLE-006] One Statement Per Line
@@ -235,14 +195,9 @@
 - **Examples**:
   ```php
   // Bad
-  if ($isTrue)
-      echo 'true';
   if ($arg === null) return true;
 
   // Good
-  if ($isTrue) {
-      echo 'true';
-  }
   if ($arg === null) {
       return true;
   }
@@ -257,17 +212,10 @@
   if ($condition) {
       // ...
   }
-  for ($index = 0; $index < $count; $i++) {
-      // ...
-  }
   return true;
 
   // Good
   if ($condition) {
-      // ...
-  }
-
-  for ($index = 0; $index < $count; $i++) {
       // ...
   }
 
@@ -386,15 +334,11 @@
   ```php
   // Bad
   echo $$foo;
-  echo $$foo['bar'];
   echo $foo->$bar['baz'];
-  echo $foo->$callback($baz);
 
   // Good
   echo ${$foo};
-  echo ${$foo}['bar'];
   echo $foo->{$bar}['baz'];
-  echo $foo->{$callback}($baz);
   ```
 
 ### [PHP-USAGE-004] Early Exit (Guard Clauses)
@@ -480,22 +424,14 @@
 - **Examples**:
   ```php
   // Bad
-  use Illuminate\Support\Facades\Route;
-  use Illuminate\Database\Eloquent\Model;
-  use App\Models\{
-    User,
-    Post,
-  };
+  use Illuminate\Support\Route;
+  use App\Models\User;
   use App\Controllers\UserController;
 
   // Good
   use App\Controllers\UserController;
-  use App\Models\{
-    Post,
-    User,
-  };
-  use Illuminate\Database\Eloquent\Model;
-  use Illuminate\Support\Facades\Route;
+  use App\Models\User;
+  use Illuminate\Support\Route;
   ```
 
 ### [PHP-USAGE-010] Named Arguments
@@ -516,16 +452,12 @@
 - **Examples**:
   ```php
   // Bad
-  $user = null;
-  if ($user !== null) {
-      $address = $user->address;
-      if ($address !== null) {
-          $city = $address->getCity();
-      }
+  if ($user !== null && $user->address !== null) {
+      $city = $user->address->getCity();
   }
 
   // Good
-  $country = $user?->address?->getCity()?->country;
+  $city = $user?->address?->getCity();
   ```
 
 ### [PHP-USAGE-012] Null Coalescing Operator
@@ -548,34 +480,18 @@
   // Bad
   if ($day) {
       if (is_string($day)) {
-          $day = strtolower($day);
-          if ($day === 'friday') {
+          if ($day === 'friday' || $day === 'saturday') {
               return true;
-          } elseif ($day === 'saturday') {
-              return true;
-          } elseif ($day === 'sunday') {
-              return true;
-          } else {
-              return false;
           }
-      } else {
-          return false;
       }
-  } else {
-      return false;
   }
+  return false;
 
   // Good
   if (empty($day)) {
       return false;
   }
-
-  $openingDays = [
-      'friday',
-      'saturday',
-      'sunday',
-  ];
-
+  $openingDays = ['friday', 'saturday', 'sunday'];
   return in_array(strtolower($day), $openingDays, true);
   ```
 
@@ -635,16 +551,14 @@
 - **Description**: Implement logging and monitoring to track errors and security events.
 - **Examples**:
   ```php
-  // Bad - no logging
+  // Bad
   public function handleData(Request $request) {
-      // Store data
+      // No logging
   }
 
-  // Good - with logging
+  // Good
   public function handleData(Request $request) {
-      Log::info('Data received');
-      Log::info($request->all());
-      // Store data
+      Log::info('Data received', $request->all());
   }
   ```
 
@@ -653,15 +567,12 @@
 - **Description**: Escape HTML output to prevent XSS attacks. Laravel: use `{{ }}`. CakePHP: use `h()` function.
 - **Examples**:
   ```php
-  // Bad (Laravel)
+  // Bad
   <?= $userName; ?>
   {!! $userName !!}
 
   // Good (Laravel)
   {{ $userName }}
-
-  // Bad (CakePHP)
-  <?= $userName; ?>
 
   // Good (CakePHP)
   <?= h($userName); ?>
@@ -700,12 +611,38 @@
 - **Description**: Encrypt sensitive information (e.g., passwords) before storing in database. Use Bcrypt.
 - **Examples**:
   ```php
-  // Good - Laravel
+  // Good
   use Illuminate\Support\Facades\Hash;
   $hashedPassword = Hash::make($password);
-
-  // Good - CakePHP
-  use Cake\Auth\DefaultPasswordHasher;
-  $hasher = new DefaultPasswordHasher();
-  $hashedPassword = $hasher->hash($password);
   ```
+
+## 6. Clean Code & Architecture Principles
+
+### Instructions for AI
+Focus heavily on these principles during review. Prioritize readability and maintainability over cleverness.
+
+- **[CLEAN-DRY] Don't Repeat Yourself**:
+  - Detect duplicated logic across files or functions.
+  - Suggest extracting repeated code into reusable utility functions, traits, or service classes.
+
+- **[CLEAN-KISS] Keep It Simple**:
+  - Flag over-engineered solutions.
+  - Suggest the simplest implementation possible.
+
+- **[CLEAN-YAGNI] You Aren't Gonna Need It**:
+  - Strict check on unused parameters, dead code, or "future-proofing" features that are not currently used.
+  - Suggest removing fields in Classes/Interfaces that serve no immediate purpose.
+
+- **[CLEAN-SRP] Single Responsibility Principle**:
+  - **Severity: REQUIRED**.
+  - A function must do only one thing. If a function name has "And" (e.g., `validateAndSave`), suggest splitting it.
+  - Separate Business Logic from Presentation Logic.
+
+- **[CLEAN-FUNC-SIZE] Function Complexity**:
+  - **Severity: REQUIRED**.
+  - Instead of strictly counting lines, flag functions that are intellectually difficult to scan.
+  - Suggest breaking down long functions (>20 lines) into sub-routines with descriptive names.
+
+- **[CLEAN-PARAMS] Parameter Object Pattern**:
+  - **Severity: REQUIRED**.
+  - Functions with >3 arguments MUST be refactored to use an array or DTO (Data Transfer Object).
