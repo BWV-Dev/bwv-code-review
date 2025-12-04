@@ -2,26 +2,34 @@
 
 ## Quy trình tóm tắt
 
-### 1. **Quản lý thiết lập CodeRabbit** - Tạo tài khoản, thông báo đến team
-### 2. **Reviewer cấu hình CodeRabbit** - Kiểm tra và cập nhật config phù hợp với dự án
-### 3. **Member code và review local** - Cài extension, chạy CodeRabbit trên máy trước khi push
-### 4. **Member tạo Pull Request** - Kiểm tra lại feedback từ CodeRabbit trên PR
-### 5. **Reviewer đánh giá PR** - Xem xét code và feedback từ CodeRabbit
-### 6. **Member sửa theo feedback** - Sửa code theo feedback (lặp lại bước 4-5 nếu cần)
+1. [**Quản lý tài khoản CodeRabbit** - Tạo tài khoản, thông báo đến team](#1-quản-lý-tài-khoản-coderabbit)
+2. [**Reviewer cấu hình CodeRabbit** - Kiểm tra và cập nhật config phù hợp với dự án](#2-reviewer-cấu-hình-coderabbit)
+3. [**Member thực hiện code và review local** - Cài extension, chạy CodeRabbit trên máy trước khi push](#3-member-thực-hiện-code-và-review-local)
+4. [**Member tạo Pull Request** - Kiểm tra lại feedback từ CodeRabbit trên PR](#4-member-tạo-pull-request)
+5. [**Reviewer kiểm tra PR** - Xem xét code và feedback từ CodeRabbit](#5-reviewer-kiểm-tra-pull-request)
+6. [**Member sửa theo feedback** - Sửa code theo feedback (lặp lại bước 4-5 nếu cần)](#6-member-sửa-theo-feedback)
 
 ## Chi tiết từng bước
 
-### 1. Quản lý thiết lập CodeRabbit
+### 1. Quản lý tài khoản CodeRabbit
 
-**Người thực hiện**: Leader (Group Leader, Project Leader).
+👤 Người thực hiện: Cấp quản lý
 
-- Tạo tài khoản CodeRabbit.
+- Tạo tài khoản CodeRabbit và mua gói Subscription.
 - Kết nối CodeRabbit với repository.
+- Thêm tài khoản Project Leader với role Admin.
+
+👤 Người thực hiện: Project Leader
+
+- Thêm tài khoản của member trong dự án với role Member.
 - Thông báo đến tất cả thành viên trong team về việc sử dụng CodeRabbit.
+- Chuyển đổi seat giữa các member.
+
+> **Note**: Hiện tại chỉ sử dụng trên các dự án thuộc tổ chức `briswell-ltd`.
 
 ### 2. Reviewer cấu hình CodeRabbit
 
-**Người thực hiện**: Reviewer.
+👤 Người thực hiện: Reviewer.
 
 - Kiểm tra file `.coderabbit.yaml` trong repository.
 - Cập nhật cấu hình cho phù hợp với từng dự án. Chủ yếu là các mục sau:
@@ -30,9 +38,9 @@
   + pre_merge_checks: sửa lại rules đặt tên cho PR ở `title` (nếu cần).
   + knowledge_base: khi cần thêm các rules khác, cần sửa lại `filePatterns` của `code_guidelines`.
 
-### 3. Member code và review local
+### 3. Member thực hiện code và review local
 
-**Người thực hiện**: Member.
+👤 Người thực hiện: Member.
 
 #### 3.1. Cài đặt và sử dụng CodeRabbit extension
 
@@ -44,15 +52,11 @@
 
 Có các mức độ sau:
 
-🔴 CRITICAL - Các vấn đề nghiêm trọng có thể gây ra lỗi hệ thống, vi phạm bảo mật hoặc mất dữ liệu.
-
-🟠 MAJOR - Các vấn đề nghiêm trọng ảnh hưởng đến chức năng hoặc hiệu suất.
-
-🟡 MINOR - Các vấn đề cần được giải quyết nhưng không ảnh hưởng nghiêm trọng đến hệ thống.
-
-🔵 TRIVIAL - Các đề xuất tác động thấp để cải thiện chất lượng mã.
-
-⚪ INFO - Các bình luận hoặc ngữ cảnh mang tính thông tin mà không yêu cầu hành động.
+    🔴 CRITICAL - Các vấn đề nghiêm trọng có thể gây ra lỗi hệ thống, vi phạm bảo mật hoặc mất dữ liệu.
+    🟠 MAJOR - Các vấn đề nghiêm trọng ảnh hưởng đến chức năng hoặc hiệu suất.
+    🟡 MINOR - Các vấn đề cần được giải quyết nhưng không ảnh hưởng nghiêm trọng đến hệ thống.
+    🔵 TRIVIAL - Các đề xuất tác động thấp để cải thiện chất lượng mã.
+    ⚪ INFO - Các bình luận hoặc ngữ cảnh mang tính thông tin mà không yêu cầu hành động.
 
 ##### CRITICAL và CODING_STANDARD (BẮT BUỘC)
 
@@ -73,7 +77,7 @@ Nên xem xét và sửa nếu:
 
 ### 4. Member tạo Pull Request
 
-**Người thực hiện**: Member.
+👤 Người thực hiện: Member.
 
 #### 4.1. Kiểm tra lại trên PR
 
@@ -106,9 +110,9 @@ Ví dụ sai:
 ❌ (Sai sự thật - CodeRabbit sẽ học sai)
 ```
 
-### 5. Reviewer đánh giá Pull Request
+### 5. Reviewer kiểm tra Pull Request
 
-**Người thực hiện**: Reviewer.
+👤 Người thực hiện: Reviewer.
 
 Xem xét các gợi ý của CodeRabbit. Phân loại:
 
@@ -133,7 +137,7 @@ Trường hợp đối với 1 rule nhưng CodeRabbit review sai nhiều lần, 
 
 ### 6. Member sửa theo feedback
 
-Người thực hiện: Member.
+👤 Người thực hiện: Member.
 
 Tiến hành sửa theo feedback của Reviewer như trước giờ sau đó push code mới lên. Lúc này:
 
