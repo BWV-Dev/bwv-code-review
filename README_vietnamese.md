@@ -35,8 +35,8 @@
 - Cập nhật cấu hình cho phù hợp với từng dự án. Chủ yếu là các mục sau:
   + path_filters: Định nghĩa những file CodeRabbit sẽ review hoặc bỏ qua.
   + path_instructions: Thêm hướng dẫn cho CodeRabbit review theo từng rules (nếu cần).
-  + pre_merge_checks: sửa lại rules đặt tên cho PR ở `title` (nếu cần).
-  + knowledge_base: khi cần thêm các rules khác, cần sửa lại `filePatterns` của `code_guidelines`.
+  + pre_merge_checks: Sửa lại rules đặt tên cho PR ở `title` (nếu cần).
+  + knowledge_base: Khi cần thêm các rules khác, cần sửa lại `filePatterns` của `code_guidelines`.
 
 ### 3. Member thực hiện code và review local
 
@@ -95,18 +95,29 @@ Nguyên tắc khi trao đổi:
 - Giải thích rõ ràng, cụ thể.
 - Không đưa thông tin sai lệch vì CodeRabbit sẽ "học" và áp dụng cho các review sau.
 
-Ví dụ đúng:
+Ví dụ: CodeRabbit review
 ```
-@coderabbit This variable follows our team's naming convention 
-for unused variables. We prefix all unused variables with underscore.
+⚠️ Potential issue | 🟠 Minor
+The variable name `_` doesn't follow naming conventions. 
+Variable names should not start with underscore. Consider renaming to `type`.
+
+Suggested change:
+- const { type: _, ...rest } = formModel;
++ const { type, ...rest } = formModel;
 ```
 
-Ví dụ sai:
+Feedback đúng:
 ```
-@coderabbit This is wrong. 
+@coderabbit This variable follows our team's naming convention for unused variables.
+We use underscore (_) for values that are intentionally destructured but not used.
+```
+
+Feedback sai:
+```
+@coderabbit This is wrong.
 ❌ (Không giải thích rõ lý do)
 
-@coderabbit We use snake_case for everything. 
+@coderabbit We use snake_case for everything.
 ❌ (Sai sự thật - CodeRabbit sẽ học sai)
 ```
 

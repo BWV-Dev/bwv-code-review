@@ -1,93 +1,159 @@
-# Guidelines for Using CodeRabbit and General Review Rules
+# Guide to Using CodeRabbit and the Code Review Process
 
-These guidelines explain how to use CodeRabbit effectively during code reviews, along with the general rules all members must follow.
+## Summary Workflow
 
-**Audience**: Reviewers and Members.
+1. [**CodeRabbit Account Management** - Create account, notify the team](#1-coderabbit-account-management)
+2. [**Reviewer Configures CodeRabbit** - Check and update config for the project](#2-reviewer-configures-coderabbit)
+3. [**Member Codes and Review Locally** - Install extension, run CodeRabbit locally before pushing](#3-member-codes-and-reviews-locally)
+4. [**Member Creates Pull Request** - Re-check CodeRabbit feedback on the PR](#4-member-creates-pull-request)
+5. [**Reviewer Review the PR** - Evaluate the code and CodeRabbit feedback](#5-reviewer-reviews-the-pull-request)
+6. [**Member Fixes Based on Feedback** - Fix code based on feedback (repeat steps 4-5 if needed)](#6-member-fixes-based-on-feedback)
 
-## 1. Introduction to CodeRabbit
+## Detailed Steps
 
-CodeRabbit is an AI-powered automated code review tool that analyzes changes in Pull Requests (PRs) and provides comments to help improve code quality.
+### 1. CodeRabbit Account Management
 
-It can:
+👤 Responsible: Management Level
 
-- Detect syntax, logic, and security issues.
-- Suggest performance optimizations.
-- Check compliance with coding rules defined in files such as `.coderabbit.yaml` and `CODING_STANDARDS.md`.
-- Propose refactoring to improve readability and maintainability.
+- Create a CodeRabbit account and purchase a subscription plan.
+- Connect CodeRabbit to the repository.
+- Add the Project Leader account with the Admin role.
 
-**Important note:**
-CodeRabbit is a supporting tool — the final decision always belongs to the reviewer.
+👤 Responsible: Project Leader
 
-## 2. General Rules When Using CodeRabbit
+- Add project members' account with the Member role.
+- Notify all team members about using CodeRabbit.
+- Management seat assignment for members.
 
-### 2.1 Read and evaluate independently
+> **Note**: Currently used only for projects under the `briswell-ltd` organization.
 
-- Reviewers must understand the code and the changes before reading CodeRabbit's suggestions.
-- Do not rely entirely on AI.
-- CodeRabbit may sometimes produce inaccurate suggestions → reviewers must prioritize team/project rules.
+### 2. Reviewer Configures CodeRabbit
 
-### 2.2 How to handle CodeRabbit comments
+👤 Responsible: Reviewer.
 
-- If a suggestion is valid → update the code, then **Resolve conversation**.
-- If a suggestion is not appropriate → provide a short, clear explanation so CodeRabbit can "learn" and adjust future reviews.
-- Discuss directly in the PR when necessary.
+- Check the `.coderabbit.yaml` file in the repository.
+- Update configuration to match the project. Mainly focus on:
+  + path_filters: Define which files CodeRabbit should review or ignore.
+  + path_instructions: Add instructions for CodeRabbit based on specific rules (if needed).
+  + pre_merge_checks: Adjust naming rules for PR titles (if needed).
+  + knowledge_base: When adding new rules, update the `filePatterns` under `code_guidelines`.
 
-### 2.3 Rules for Members
+### 3. Member Codes and Reviews Locally
 
-- **Always** use CodeRabbit to review code locally before pushing (using the VSCode or Cursor extension).
-- **Must** carefully verify code before pushing (hard-coded credentials, sensitive configs, etc.).
-- All the rules in CODING_STANDARDS.md must be satisfied before creating a PR.
-- **Should not** modify code solely based on CodeRabbit's suggestions unless approved by the reviewer.
-- May ask questions directly to CodeRabbit, but **always provide accurate information** about the project and coding rules. If you give wrong information (e.g., saying "we use snake_case" when the team uses camelCase), CodeRabbit will learn this mistake and give incorrect suggestions in future reviews.
+👤 Responsible: Member.
 
-### 2.4 Rules for Reviewers
+#### 3.1. Install and Use the CodeRabbit Extension
 
-- Reviewers must filter out unnecessary or irrelevant suggestions.
-- Feedback to AI must be clear and concise. Examples:
-  - Not recommended: "This review is wrong."
-  - Recommended: "Variable name does not follow our camelCase convention."
-- Carefully check areas that AI may miss (business logic, edge cases, security, etc.).
-- If CodeRabbit repeatedly gives incorrect suggestions, consider updating .coderabbit.yaml.
+- Install the CodeRabbit extension for VSCode or Cursor.
+- Run a CodeRabbit review locally after completing a part or the whole feature.
+- Do not create a PR (Ready for review) without running a local review first.
 
-### 3. Pull Request Review Flow Using CodeRabbit
+#### 3.2. Handle Issues by Priority Level
 
-```mermaid
-graph TD
-    A["Member creates Pull Request<br/>- Assigns Reviewer"] --> B["Member adds 'coderabbit-review' label<br/>(or another predefined label)"]
-    B --> C["Run AI Review<br/>Wait for CodeRabbit to analyze"]
-    
-    C --> D["Reviewer reads CodeRabbit's output"]
-    D --> D1{"Is the suggestion valid?"}
-    
-    D1 -->|Yes| D2["Member updates code<br/>Resolves valid comments"]
-    D1 -->|No| D3["Reviewer Rejects + provides reason<br/>Keeps comment for AI learning"]
-    
-    D --> E["Reviewer performs manual review<br/>- Business logic<br/>- Coding rules<br/>- Security<br/>- Performance"]
-    
-    E --> F["Reviewer summarizes final feedback<br/>- Removes unnecessary AI suggestions"]
-    
-    F --> G["Member applies fixes<br/>- Responds to each comment<br/>- Pushes clean commits"]
-    
-    G --> H["Reviewer performs final check"]
-    
-    H --> H1{"Meets requirements?"}
-    H1 -->|No| F
-    H1 -->|Yes| I["Reviewer Approve & Merge"]
+The priority levels are:
 
-    %% Member nodes (green)
-    style A fill:#A7F3D0,stroke:#059669,stroke-width:1px
-    style B fill:#A7F3D0,stroke:#059669,stroke-width:1px
-    style D2 fill:#A7F3D0,stroke:#059669,stroke-width:1px
-    style G fill:#A7F3D0,stroke:#059669,stroke-width:1px
+    🔴 CRITICAL - Severe issues that could cause system failures, security breaches, or data loss.
+    🟠 MAJOR - Significant problems that impact functionality or performance.
+    🟡 MINOR - Issues that should be addressed but don't critically impact the system.
+    🔵 TRIVIAL - Low-impact suggestions for code quality improvements.
+    ⚪ INFO - Informational comments or context without requiring action.
 
-    %% Reviewer/Leader nodes (yellow)
-    style C fill:#FDE68A,stroke:#D97706,stroke-width:1px
-    style D fill:#FDE68A,stroke:#D97706,stroke-width:1px
-    style D1 fill:#FDE68A,stroke:#D97706,stroke-width:1px
-    style D3 fill:#FDE68A,stroke:#D97706,stroke-width:1px
-    style E fill:#FDE68A,stroke:#D97706,stroke-width:1px
-    style F fill:#FDE68A,stroke:#D97706,stroke-width:1px
-    style H fill:#FDE68A,stroke:#D97706,stroke-width:1px
-    style H1 fill:#FDE68A,stroke:#D97706,stroke-width:1px
-    style I fill:#FDE68A,stroke:#D97706,stroke-width:1px
+##### CRITICAL and CODING_STANDARD (MANDATORY)
+
+- All issues of these types must be fixed.
+- If unsure how to fix a CRITICAL issue → Ask the Project Leader before creating a PR.
+- Do not create a PR if any CRITICAL issues or CODING_STANDARD violations remain.
+
+##### MAJOR / MINOR / TRIVIAL (RECOMMENDED)
+
+Not mandatory to fix immediately.
+Consider fixing if:
+
+  + The fix is clear.
+  + The suggestion is reasonable and improves code quality.
+  + If unsure → Ask the Project Leader.
+
+#### 3.3. Re-check the Entire Code Against Coding Rules
+
+### 4. Member Creates Pull Request
+
+👤 Responsible: Member.
+
+#### 4.1. Re-check on the PR
+
+- After creating the PR, apply the `coderabbit-review` label so CodeRabbit can review it automatically.
+
+  **Mandatory**: Any remaining CODING_STANDARD or CRITICAL issues must be fixed.
+
+#### 4.2. Communicate with CodeRabbit
+
+Note: Always use English when communicating with CodeRabbit.
+
+Guidelines for communication:
+
+- Provide accurate information about project rules.
+- Explain clearly and specifically.
+- Do not provide incorrect information, as CodeRabbit will "learn" and apply it in future reviews.
+
+Example: CodeRabbit review
 ```
+⚠️ Potential issue | 🟠 Minor
+The variable name `_` doesn't follow naming conventions. 
+Variable names should not start with underscore. Consider renaming to `type`.
+
+Suggested change:
+- const { type: _, ...rest } = formModel;
++ const { type, ...rest } = formModel;
+```
+
+Correct feedback:
+```
+@coderabbit This variable follows our team's naming convention for unused variables.
+We use underscore (_) for values that are intentionally destructured but not used.
+```
+
+Incorrect feedback:
+```
+@coderabbit This is wrong.
+❌ (No clear explanation)
+
+@coderabbit We use snake_case for everything.
+❌ (Incorrect - CodeRabbit will learn bad information)
+```
+
+### 5. Reviewer Reviews the Pull Request
+
+👤 Responsible: Reviewer.
+
+Review CodeRabbit's suggestions and classify them:
+
+- Valid: Keep them for the member to fix.
+- Invalid: Reject and provide a clear explanation so CodeRabbit can "learn".
+
+Example of good feedback:
+```
+@coderabbit This suggestion doesn't apply. We use camelCase 
+for all variable names according to our CODING_STANDARDS.md.
+```
+
+Examples of feedback to avoid:
+```
+This review is wrong. ❌
+Not applicable. ❌
+```
+
+Note: The reviewer will also perform manual review and provide feedback for the member to fix.
+Additionally, the reviewer may communicate further with CodeRabbit (using English).
+
+If CodeRabbit repeatedly reviews a rule incorrectly, the reviewer must update the instruction and `knowledge_base` sections in the `.coderabbit.yaml` file of the project.
+
+### 6. Member Fixes Based on Feedback
+
+👤 Responsible: Member.
+
+Apply the reviewer's feedback as usual and push the updated code. At this point:
+
+  - CodeRabbit will automatically review the new changes (Step 4).
+  - The reviewer will check again until all requirements are met (Step 5).
+
+Repeat until all feedback has been addressed and the PR is merged.
