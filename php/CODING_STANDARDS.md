@@ -94,9 +94,11 @@
       use SomeTrait;
 
       public const MAX_VALUE = 100;
+      protected const DEFAULT_VALUE = 50;
       private const MIN_VALUE = 1;
 
       public $name;
+      protected $status;
       private $id;
 
       public function __construct() {}
@@ -157,23 +159,40 @@
 
 ### [PHP-STYLE-005] Trailing Commas
 - **Severity**: REQUIRED
-- **Description**: Multi-line arrays, arguments, parameters, and match expressions must have a trailing comma on the last item.
+- **Description**: **ONLY** multi-line arrays, arguments, parameters, and match expressions must have a trailing comma on the last item. Single-line declarations do NOT require trailing commas.
 - **Examples**:
   ```php
-  // Good
+  // Array
   $foo = [
-      'bar' => true,
-      'baz' => false,
+      'bar' => [
+          'baz' => true,
+          'baq' => true,
+      ],
+      'bas' => [
+          'bak' => false,
+      ],
   ];
 
+  // Arguments list
   foo(
       'bar',
       'baz',
   );
 
-  function foo($x, $y,) {
+  // Parameters list
+  function foo(
+      $x,
+      $y,
+  ) {
       // ...
   }
+
+  // Match expressions
+  $returnValue = match ($food) {
+      'apple' => 'This food is an apple',
+      'bar' => 'This food is a bar',
+      'cake' => 'This food is a cake',
+  };
   ```
 
 ### [PHP-STYLE-006] One Statement Per Line
@@ -519,18 +538,7 @@
   $query = $this->query()->whereRaw('user.name LIKE ?', [$nameInput]);
   ```
 
-### [PHP-SECURITY-002] Choose Libraries with Proven Security
-- **Severity**: REQUIRED
-- **Description**: For open source libraries, check popularity (1000+ downloads/month), security vulnerabilities (CVE, Snyk), active maintenance, permissive license, audits, and code quality. For proprietary libraries, review security policies and data handling practices.
-- **Examples**:
-  ```php
-  // Good
-  // Use well-maintained libraries with active security monitoring
-  // Check Snyk, CVE databases for vulnerabilities
-  // Prefer MIT or Apache 2.0 licensed libraries
-  ```
-
-### [PHP-SECURITY-003] Implement Rate Limiting
+### [PHP-SECURITY-002] Implement Rate Limiting
 - **Severity**: OPTIONAL
 - **Description**: Implement rate limiting to prevent brute force attacks (optional based on project size).
 - **Examples**:
@@ -546,7 +554,7 @@
   }
   ```
 
-### [PHP-SECURITY-004] Use Logging and Monitoring
+### [PHP-SECURITY-003] Use Logging and Monitoring
 - **Severity**: REQUIRED
 - **Description**: Implement logging and monitoring to track errors and security events.
 - **Examples**:
@@ -562,14 +570,16 @@
   }
   ```
 
-### [PHP-SECURITY-005] Escape HTML Output
+### [PHP-SECURITY-004] Escape HTML Output
 - **Severity**: CRITICAL
 - **Description**: Escape HTML output to prevent XSS attacks. Laravel: use `{{ }}`. CakePHP: use `h()` function.
 - **Examples**:
   ```php
-  // Bad
-  <?= $userName; ?>
+  // Bad (Laravel)
   {!! $userName !!}
+
+  // Bad (CakePHP)
+  <?= $userName; ?>
 
   // Good (Laravel)
   {{ $userName }}
@@ -578,7 +588,7 @@
   <?= h($userName); ?>
   ```
 
-### [PHP-SECURITY-006] Avoid User Input in File Paths and URLs
+### [PHP-SECURITY-005] Avoid User Input in File Paths and URLs
 - **Severity**: CRITICAL
 - **Description**: Never use user input directly in file paths or redirect URLs. Use IDs to look up paths/URLs.
 - **Examples**:
@@ -592,7 +602,7 @@
   return redirect($redirectUrl);
   ```
 
-### [PHP-SECURITY-007] Validate Input Both Client-Side and Server-Side
+### [PHP-SECURITY-006] Validate Input Both Client-Side and Server-Side
 - **Severity**: CRITICAL
 - **Description**: Always validate input on both client-side and server-side. Server-side validation is critical.
 - **Examples**:
@@ -606,7 +616,7 @@
   }
   ```
 
-### [PHP-SECURITY-008] Encrypt Sensitive Information
+### [PHP-SECURITY-007] Encrypt Sensitive Information
 - **Severity**: CRITICAL
 - **Description**: Encrypt sensitive information (e.g., passwords) before storing in database. Use Bcrypt.
 - **Examples**:
