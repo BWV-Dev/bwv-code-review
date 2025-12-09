@@ -29,7 +29,6 @@ reviews:
   in_progress_fortune: true
   poem: false
   path_filters:
-    - "**/*.php"
     - "!**/.env*"
     - "!**/node_modules/**"
     - "!**/dist/**"
