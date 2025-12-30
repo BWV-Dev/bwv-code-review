@@ -1,7 +1,7 @@
 # PHP Coding Rules
 
 ## Table of Contents
-- [1. Naming](#1-naming)
+- [1. Naming Conventions](#1-naming-conventions)
 - [2. Styling](#2-styling)
 - [3. Comments](#3-comments)
 - [4. Usage](#4-usage)
@@ -510,7 +510,7 @@
   if (empty($day)) {
       return false;
   }
-  $openingDays = ['friday', 'saturday', 'sunday'];
+  $openingDays = ['friday', 'saturday'];
   return in_array(strtolower($day), $openingDays, true);
   ```
 

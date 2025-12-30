@@ -32,7 +32,7 @@ reviews:
     - "!**/.env*"
     - "!**/node_modules/**"
     - "!**/dist/**"
-    - "!**/vendor/**"  
+    - "!**/vendor/**"
   path_instructions:
     - path: "**/*.php"
       instructions: |
@@ -44,7 +44,7 @@ reviews:
           4. Prioritize CRITICAL and REQUIRED rules first
         When a standards violation is found, you MUST include the Rule ID at the beginning of the response.
         Format: "[RULE-ID] <Rule Name>: <Explanation>"
-        Example: [TS-NAMING-001] CamelCase: Variables/functions must be `camelCase`.
+        Example: [PHP-NAMING-003] Constants: Constants must use `UPPER_CASE_UNDERSCORE` format.
   abort_on_close: true
   disable_cache: false
   auto_review:
@@ -153,7 +153,7 @@ reviews:
     shopifyThemeCheck:
       enabled: false
     luacheck:
-      enabled: true
+      enabled: false
     brakeman:
       enabled: false
     dotenvLint:
