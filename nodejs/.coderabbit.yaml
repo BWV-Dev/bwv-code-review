@@ -174,11 +174,11 @@ knowledge_base:
       - "**/.cursorrules"
       - "**/CODING_STANDARDS.md"
   learnings:
-    scope: "auto"
+    scope: "local"
   issues:
-    scope: "auto"
+    scope: "local"
   pull_requests:
-    scope: "auto"
+    scope: "local"
 
 code_generation:
   docstrings:
