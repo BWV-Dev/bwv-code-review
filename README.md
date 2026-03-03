@@ -48,6 +48,11 @@
 - Run a CodeRabbit review locally after completing a part or the whole feature.
 - Do not create a Pull Request (Ready for review) without running a local review first.
 
+Note: 
+- Only review repositories that are authorized to use CodeRabbit. Do not use CodeRabbit to review personal repositories or repositories that are not on the approved list.
+
+- Local reviews may hit the rate limit, so only run them when necessary. If you encounter an error, wait a few minutes and try again.
+
 #### 3.2. Handle Issues by Priority Level
 
 The priority levels are:
