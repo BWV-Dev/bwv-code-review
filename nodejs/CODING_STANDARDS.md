@@ -157,15 +157,25 @@
   ```
 
 ### [TS-STYLE-002] Explicit Type Annotations
-- **Severity**: REQUIRED
-- **Description**: Use type annotations specifically for function parameters and return types to enhance readability.
+- **Severity**: REQUIRED (parameters) / OPTIONAL (return type)
+- **Description**:
+  - **Parameters**: REQUIRED to annotate explicitly.
+  - **Return type**: OPTIONAL when the function returns a single, simple shape — let TypeScript infer it.
+  - **Return type**: REQUIRED when the function can return multiple shapes/formats (union types, conditional responses, etc.) so callers know exactly what to handle.
 - **Examples**:
   ```typescript
-  // Bad
+  // Bad - parameters not annotated
   function calculate(price, discount) { ... }
 
-  // Good
-  function calculate(price: number, discount: number): number { ... }
+  // Good - parameters typed, return type inferred
+  function calculate(price: number, discount: number) {
+    return price * (discount / 100);
+  }
+
+  // Good - multiple return shapes → declare return type explicitly
+  function findUser(id: number): User | { error: string } | null {
+    ...
+  }
   ```
 
 ### [TS-STYLE-003] Async/Await over Callbacks
@@ -284,14 +294,22 @@
 
 ### [TS-LINT-004] No Explicit Any
 - **Severity**: WARNING
-- **Description**: Avoid any. Define types or use unknown if absolutely necessary.
+- **Description**:
+  - **Avoid abusing** `any` — it disables type checking. Prefer specific types or `unknown` when uncertain.
+  - **Acceptable** for genuinely hard-to-type cases (complex generics, dynamic external payloads, untyped 3rd-party libs).
 - **Examples**:
   ```typescript
   // Bad
   const age: any = '17';
 
-  // Good
+  // Good - specific type
   const age: number = 17;
+
+  // Good - 'unknown' when type is uncertain, narrow before use
+  function parsePayload(raw: unknown) { ... }
+
+  // Acceptable - untyped 3rd-party lib
+  const client: any = require('legacy-untyped-sdk');
   ```
 
 ### [TS-LINT-006] Specific Imports
