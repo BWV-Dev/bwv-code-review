@@ -48,6 +48,11 @@
 - Chạy CodeRabbit review ngay trên máy local sau khi code xong một phần hoặc toàn bộ.
 - Không được tạo Pull Request (Ready for review) khi chưa chạy review local.
 
+Lưu ý: 
+- Chỉ review các repository dự án được phép sử dụng CodeRabbit. Không dùng CodeRabbit review cho repository cá nhân hoặc repository không thuộc danh sách cho phép.
+
+- Review local có thể bị rate limit, vì vậy chỉ nên chạy khi cần thiết. Khi gặp lỗi, chờ vài phút rồi thử lại.
+
 #### 3.2. Xử lý các lỗi theo mức độ ưu tiên
 
 Có các mức độ sau:

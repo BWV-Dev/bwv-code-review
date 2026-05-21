@@ -1,7 +1,7 @@
 # PHP Coding Rules
 
 ## Table of Contents
-- [1. Naming](#1-naming)
+- [1. Naming Conventions](#1-naming-conventions)
 - [2. Styling](#2-styling)
 - [3. Comments](#3-comments)
 - [4. Usage](#4-usage)
@@ -304,9 +304,9 @@
   }
   ```
 
-### [PHP-COMMENT-004] Language
+### [PHP-COMMENT-004] Comment Language
 - **Severity**: REQUIRED
-- **Description**: Use English only for all comments.
+- **Description**: Comments should be written in English. Japanese is allowed only for business terms, configuration values, labels, or domain-specific names, and should be enclosed in quotes if possible.
 - **Examples**:
   ```php
   // Bad
@@ -316,6 +316,13 @@
   // Good
   // Array of students
   $students = [];
+
+  // Exception: Laravel migration
+  // This comment in DB, not source code comment
+  $table->string('name', 60)->comment('氏名');  
+
+  // Exception: Comment for configuration value name
+  ValueUtil::constToValue('common.pdf_type.STANDARD'); // 1:規格書
   ```
 
 ## 4. Usage
@@ -426,15 +433,24 @@
 
 ### [PHP-USAGE-008] Group Same Namespaces
 - **Severity**: REQUIRED
-- **Description**: Same namespaces must be grouped using curly braces syntax.
+- **Description**: Imports sharing the same namespace prefix must be grouped using curly brace syntax at the deepest common level.
 - **Examples**:
   ```php
   // Bad
-  use Foo\Bar;
-  use Foo\Baz;
+  use Foo\NS1\Bar;
+  use Foo\NS2\Bax;
+  use Foo\NS2\Baz;
+
+  // Bad: Group at parent folder.
+  use Foo\{
+    NS1\Bar,
+    NS2\Bax,
+    NS2\Baz,
+  };
 
   // Good
-  use Foo\{Bar, Baz};
+  use Foo\NS1\Bar;
+  use Foo\NS2\{Baz, Bax};
   ```
 
 ### [PHP-USAGE-009] Sort Import Statements
@@ -510,7 +526,7 @@
   if (empty($day)) {
       return false;
   }
-  $openingDays = ['friday', 'saturday', 'sunday'];
+  $openingDays = ['friday', 'saturday'];
   return in_array(strtolower($day), $openingDays, true);
   ```
 
