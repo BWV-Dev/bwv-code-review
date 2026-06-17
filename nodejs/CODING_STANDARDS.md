@@ -12,19 +12,7 @@
 
 ## 1. Naming
 
-### [TS-NAMING-001] Use camelCase for variables 
-- **Severity**: REQUIRED
-- **Description**: Variables must utilize `camelCase`.
-- **Examples**:
-  ```typescript
-  // Bad
-  let first_name = 'John';
-
-  // Good
-  let firstName = 'John';
-  ```
-
-### [TS-NAMING-002] Use meaningful names
+### [TS-NAMING-001] Use meaningful names
 - **Severity**: REQUIRED
 - **Description**: Names must be descriptive. Avoid single letters (e.g., a, b) unless in small loops
 - **Examples**:
@@ -38,7 +26,7 @@
     let age = 20;
     ```
 
-### [TS-NAMING-003] Avoid overly long variable names
+### [TS-NAMING-002] Avoid overly long variable names
 - **Severity**: RECOMMENDED
 - **Description**: Variable names should be concise but descriptive.
 - **Examples**:
@@ -50,7 +38,7 @@
   let firstName = 'John';
   ```
 
-### [TS-NAMING-004] No leading underscores
+### [TS-NAMING-003] No leading underscores
 - **Severity**: REQUIRED
 - **Description**: Do not start variable names with an underscore _ unless it is a specific framework requirement or private field convention (though private keyword is preferred).
 - **Examples**:
@@ -59,7 +47,7 @@
   let _firstName = 'John';
   ```
 
-### [TS-NAMING-005] Hungarian Notation / Data Type Prefix
+### [TS-NAMING-004] Hungarian Notation / Data Type Prefix
 - **Severity**: OPTIONAL
 - **Description**: Can use prefixes to indicate data types if it helps clarity (e.g., str, num, is).
 - **Examples**:
@@ -69,7 +57,7 @@
   let numValue = 10;
   ```
 
-### [TS-NAMING-006] No unclear abbreviations
+### [TS-NAMING-005] No unclear abbreviations
 - **Severity**: REQUIRED
 - **Description**: Avoid abbreviations that are not universally understood.
 - **Examples**:
@@ -81,7 +69,7 @@
   let firstName = 'John';
   ```
 
-### [TS-NAMING-007] Constants must be UPPER_SNAKE_CASE
+### [TS-NAMING-006] Constants must be UPPER_SNAKE_CASE
 - **Severity**: REQUIRED
 - **Description**: Constants (especially global/config constants) must use UPPER_CASE with underscores.
 - **Examples**:
@@ -93,70 +81,9 @@
   const BUCKET_UPLOAD = 'folder';
   ```
 
-### [TS-NAMING-008] Boolean variables must use verb prefixes
-- **Severity**: REQUIRED
-- **Description**: Boolean variables should start with is, should, can, has, etc.
-- **Examples**:
-  ```typescript
-  let isConnected = true;
-  let shouldConfirm = true;
-  let canResize = true;
-  ```
-
-### [TS-NAMING-009] Use let/const instead of var
-- **Severity**: REQUIRED
-- **Description**: Never use var. Use const by default, and let if reassignment is needed.
-- **Examples**:
-  ```typescript
-  // Bad
-  var num = 10;
-
-  // Good
-  let num = 10;
-  const PI = 3.14;
-  ```
-
-### [TS-NAMING-010] Avoid keyword collisions
-- **Severity**: REQUIRED
-- **Description**: Do not use variable names that clash with language keywords (e.g., class, print, break).
-- **Examples**:
-  ```typescript
-  // Bad
-  let class = 'Math';
-
-  // Good
-  let className = "Math";
-  ```
-
-### [TS-NAMING-011] 
-- **Severity**: REQUIRED
-- **Description**: Class names, Interfaces, Types, and Enums must use PascalCase.
-- **Examples**:
-  ```typescript
-  // Bad
-  class person {}
-  enum color {}
-
-  // Good
-  class Person {}
-  enum Color {}
-  ```
-
 ## 2. Styling
 
-### [TS-STYLE-001] Use single quotes
-- **Severity**: RECOMMENDED
-- **Description**: Use single quotes ' for string literals unless interpolating or escaping.
-- **Examples**:
-  ```typescript
-  // Bad
-  const message = "Hello";
-
-  // Good
-  const message = 'Hello';
-  ```
-
-### [TS-STYLE-002] Explicit Type Annotations
+### [TS-STYLE-001] Explicit Type Annotations
 - **Severity**: REQUIRED (parameters) / OPTIONAL (return type)
 - **Description**:
   - **Parameters**: REQUIRED to annotate explicitly.
@@ -178,7 +105,7 @@
   }
   ```
 
-### [TS-STYLE-003] Async/Await over Callbacks
+### [TS-STYLE-002] Async/Await over Callbacks
 - **Severity**: REQUIRED
 - **Description**: Avoid callback hell. Use async/await syntax.
 - **Examples**:
@@ -191,19 +118,7 @@
   const data = await res.json();
   ```
 
-### [TS-STYLE-004] Defensive Programming (Null Checks)
-- **Severity**: REQUIRED
-- **Description**: Always check for null/undefined. Use Optional Chaining (?.) where possible.
-- **Examples**:
-  ```typescript
-  // Bad
-  console.log(user.address.city);
-
-  // Good
-  console.log(user?.address?.city);
-  ```
-
-### [TS-STYLE-005] Use Interfaces for Object Shapes
+### [TS-STYLE-003] Use Interfaces for Object Shapes
 - **Severity**: RECOMMENDED
 - **Description**: Define object structures using interface.
 - **Examples**:
@@ -257,62 +172,7 @@
   const expensive = filter(products, p => p.price > 100);
   ```
 
-### [TS-LINT-001] No Console.log
-- **Severity**: WARNING
-- **Description**: Do not leave console.log in production code. Use a logger instead.
-- **Examples**:
-  ```typescript
-  // Bad
-  console.log(`Listening on ${bind}`);
-
-  // Good
-  logger.info(`Listening on ${bind}`);
-  ```
-
-### [TS-LINT-002] Enforce Semicolons
-- **Severity**: REQUIRED
-- **Description**: Statements must end with a semicolon ;.
-- **Examples**:
-  ```typescript
-  // Bad - required ';' at the end
-  const age = 20
-
-  // Good
-  const age = 20;
-  ```
-
-### [TS-LINT-003] No Debugger
-- **Severity**: ERROR
-- **Description**: debugger statements are strictly forbidden in committed code.
-- **Examples**:
-  ```typescript
-  function isTruthy(x) {
-    debugger; // <-- Error line
-    return Boolean(x);
-  }
-  ```
-
-### [TS-LINT-004] No Explicit Any
-- **Severity**: WARNING
-- **Description**:
-  - **Avoid abusing** `any` — it disables type checking. Prefer specific types or `unknown` when uncertain.
-  - **Acceptable** for genuinely hard-to-type cases (complex generics, dynamic external payloads, untyped 3rd-party libs).
-- **Examples**:
-  ```typescript
-  // Bad
-  const age: any = '17';
-
-  // Good - specific type
-  const age: number = 17;
-
-  // Good - 'unknown' when type is uncertain, narrow before use
-  function parsePayload(raw: unknown) { ... }
-
-  // Acceptable - untyped 3rd-party lib
-  const client: any = require('legacy-untyped-sdk');
-  ```
-
-### [TS-LINT-006] Specific Imports
+### [TS-LINT-001] Specific Imports
 - **Severity**: RECOMMENDED
 - **Description**: Import only what you need to reduce bundle size.
 - **Examples**:
@@ -341,10 +201,6 @@
 ### [SEC-API-001] Rate Limiting
 - **Severity**: RECOMMENDED
 - **Description**: Implement rate limiting on public endpoints to prevent brute-force/DDoS.
-
-### [SEC-LOG-001] Structured Logging
-- **Severity**: REQUIRED
-- **Description**: Use structured logging (e.g., Winston) instead of standard output. Log to files/streams, not just console.
 
 ### [SEC-XSS-001] Escape HTML (XSS)
 - **Severity**: CRITICAL
@@ -400,16 +256,6 @@ Focus heavily on these principles during review. Prioritize readability and main
   - **Severity: REQUIRED**.
   - A function must do only one thing. If a function name has "And" (e.g., `validateAndSave`), suggest splitting it.
   - Separate Business Logic from UI/View Logic.
-
-- **[CLEAN-FUNC-SIZE] Function Complexity**:
-  - **Severity: REQUIRED**.
-  - Instead of strictly counting lines, flag functions that are intellectually difficult to scan.
-  - Suggest breaking down long functions (>20 lines) into sub-routines with descriptive names.
-
-- **[CLEAN-PARAMS] Parameter Object Pattern**:
-  - **Severity: REQUIRED**.
-  - Functions with >3 arguments MUST be refactored to use an Interface/Object Destructuring.
-  - Ex: `fn(a, b, c, d)` -> `fn({ a, b, c, d })`.
 
 - **[CLEAN-NESTING] Early Return / Guard Clauses**:
   - **Severity: RECOMMENDED**.
