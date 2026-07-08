@@ -32,11 +32,13 @@
 👤 Responsible: Reviewer.
 
 - Check the `.coderabbit.yaml` file in the repository.
+- Copy the appropriate coding standards template (`nodejs/CODING_STANDARDS.md` or `php/CODING_STANDARDS.md`) to the project root as `CODING_STANDARDS.md`, then update it to match the project's conventions.
+  + Remove rules already enforced by ESLint or another project linter to avoid duplicate feedback from CodeRabbit.
 - Update configuration to match the project. Mainly focus on:
   + path_filters: Define which files CodeRabbit should review or ignore.
   + path_instructions: Add instructions for CodeRabbit based on specific rules (if needed).
   + pre_merge_checks: Adjust naming rules for Pull Request titles (if needed).
-  + knowledge_base: When adding new rules, update the `filePatterns` under `code_guidelines`.
+  + knowledge_base: Ensure `filePatterns` under `code_guidelines` includes `CODING_STANDARDS.md`. Update it when adding other guideline files.
 
 ### 3. Member Codes and Reviews Locally
 
