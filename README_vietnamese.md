@@ -32,11 +32,13 @@
 👤 Người thực hiện: Reviewer.
 
 - Kiểm tra file `.coderabbit.yaml` trong repository.
+- Copy file coding standards phù hợp (`nodejs/CODING_STANDARDS.md` hoặc `php/CODING_STANDARDS.md`) vào thư mục gốc của dự án với tên `CODING_STANDARDS.md`, sau đó chỉnh sửa cho phù hợp với quy ước của dự án.
+  + Loại bỏ các rule đã được ESLint hoặc công cụ lint khác của dự án kiểm tra để tránh CodeRabbit feedback trùng lặp.
 - Cập nhật cấu hình cho phù hợp với từng dự án. Chủ yếu là các mục sau:
   + path_filters: Định nghĩa những file CodeRabbit sẽ review hoặc bỏ qua.
   + path_instructions: Thêm hướng dẫn cho CodeRabbit review theo từng rules (nếu cần).
   + pre_merge_checks: Sửa lại rules đặt tên cho Pull Request ở `title` (nếu cần).
-  + knowledge_base: Khi cần thêm các rules khác, cần sửa lại `filePatterns` của `code_guidelines`.
+  + knowledge_base: Đảm bảo `filePatterns` của `code_guidelines` có chứa `CODING_STANDARDS.md`. Khi thêm các file hướng dẫn khác, cần cập nhật lại mục này.
 
 ### 3. Member thực hiện code và review local
 
