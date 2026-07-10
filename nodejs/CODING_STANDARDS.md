@@ -360,6 +360,50 @@
   import groupBy from 'lodash/groupBy';
   const residentsByCompany = groupBy(residents, 'companyNo');
   ```
+  
+### [TS-USAGE-002] Type-Safe Comparisons
+- **Severity**: REQUIRED
+- **Description**: 
+  - Use `===` instead of `==`, `!==` instead of `!=` for tight data comparisons.
+  - When comparing two values, always ensure they are of the **same data type**. Convert both sides to a common type before comparison to avoid unexpected results (e.g., `'1' === 1` is `false`).
+- **Exceptions**:
+  - Use `value == null` or `value != null` only when intentionally treating both `null` and `undefined` as the same absence state. Keep this scoped to nullish checks, not general value comparison.
+  - Use dedicated JavaScript APIs for edge cases where strict equality is not the correct semantic check, such as `Number.isNaN(value)` for `NaN` or `Object.is(a, b)` when `-0` must be distinguished from `0`.
+- **Examples**:
+  ```typescript
+  const inputValue = '1'; // Value from request, DB, etc.
+
+  // Bad - type mismatch (string vs number)
+  const STATUS_ACTIVE = 1;
+  if (inputValue === STATUS_ACTIVE) { ... } // '1' === 1 → false
+
+  const VALID_IDS = [1, 2, 3, 4, 5];
+  if (VALID_IDS.includes(inputValue)) { ... } // '1' not in [1,2,3,4,5]
+
+  // Good 👍 - Convert to the SAME type before comparing
+  // Option 1: Convert to number
+  enum YesFlag { Yes = 1, No = 0 }
+  if (Number(inputValue) === YesFlag.Yes) { ... }
+
+  // Option 2: Convert to string
+  const VALID_STATUSES = ['1', '2', '3'];
+  if (VALID_STATUSES.includes(String(inputValue))) { ... }
+
+  // Exception - nullish check
+  // Allowed when both null and undefined mean "missing"
+  if (optionalValue == null) {
+    return defaultValue;
+  }
+
+  // Exception - NaN must be checked with Number.isNaN
+  const score = Number(request.query.score);
+  if (Number.isNaN(score)) {
+    throw new Error('Invalid score');
+  }
+
+  // Exception - Object.is when the difference between 0 and -0 matters
+  Object.is(-0, 0); // false
+  ```
 
 ### [TS-LINT-001] No unused vars
 - **Severity**: REQUIRED

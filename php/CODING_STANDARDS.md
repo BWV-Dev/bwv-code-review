@@ -241,22 +241,41 @@
   return true;
   ```
 
-### [PHP-STYLE-009] Strict Comparison Operators
+### [PHP-STYLE-009] Type-Safe Comparisons
 - **Severity**: CRITICAL
-- **Description**: Use `===` instead of `==`, and `!==` instead of `!=` for comparisons.
+- **Description**:
+  - Use `===` instead of `==`, and `!==` instead of `!=` for comparisons.
+  - When comparing two values, ensure they are of the same data type. Convert both sides to a common type before comparison to avoid unexpected results (for example, `'1' === 1` is `false`).
+  - When using comparison helpers such as `in_array`, enable strict comparison when supported.
 - **Examples**:
   ```php
+  // Example 1: check NULL column data from database
+
   // Bad
   $userFlag = $this->User->getUserFlag();
+  // When $userFlag = 0, it also early return
   if ($userFlag == null) {
       return;
   }
+  // ...
 
   // Good
   $userFlag = $this->User->getUserFlag();
   if ($userFlag === null) {
       return;
   }
+  // ...
+
+  // Example 2: Type mismatch (string vs number)
+  // Bad
+  $status = $request->input('status'); // returns string '1'
+  if ($status === 1) { ... } // '1' === 1 is false
+
+  // Good - Convert to the SAME type before comparing
+  if ((int) $status === 1) { ... }
+
+  $validStatuses = ['1', '2', '3'];
+  if (in_array((string) $status, $validStatuses, true)) { ... }
   ```
 
 ## 3. Comments
