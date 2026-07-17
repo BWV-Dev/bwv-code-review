@@ -13,6 +13,10 @@ reviews:
         When a standards violation is found, you MUST include the Rule ID at the beginning of the response if the rule exists in the "CODING_STANDARDS.md".
         Format: "[RULE-ID] <Rule Name>: <Explanation>"
         Example: [TS-NAMING-001] CamelCase: Variables/functions must be `camelCase`.
+        For TypeScript `any`, only flag the following cases:
+        - `any` is used for function parameters or return types where a proper type can be defined.
+        - `any` or `as any` is used where the type can clearly be defined.
+        - Do NOT flag `as any` caused by type mismatches with Drizzle ORM — this is acceptable.
   auto_review:
     base_branches:
       - develop

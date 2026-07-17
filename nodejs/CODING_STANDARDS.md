@@ -468,8 +468,11 @@
   ```
 
 ### [TS-LINT-005] No Explicit Any
-- **Severity**: RECOMMENDED
-- **Description**: Avoid abusing any. Prefer specific types or unknown. any is acceptable only for exceptional cases, such as legacy untyped libraries, with a clear comment.
+- **Severity**: REQUIRED
+- **Description**: Do not use `any` — it disables type-checking entirely. Prefer specific types or `unknown`. Enable `@typescript-eslint/no-explicit-any` at error level.
+- **Exceptions**:
+  - Where `any` is genuinely needed (e.g. legacy untyped libraries), use `eslint-disable-next-line` with a `-- reason` comment.
+  - When a library forces `any` across a whole folder (e.g. Drizzle under `src/db`), lower error → warn for that folder only in the ESLint config — never turn the rule off project-wide.
 - **Examples**:
   ```typescript
   // Bad
@@ -482,8 +485,15 @@
   function parsePayload(raw: unknown) { ... }
 
   // Acceptable with reason 👍
-  // eslint-disable-next-line @typescript-eslint/ no-explicit-any -- legacy SDK has no type definitions
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- legacy SDK has no type definitions
   const legacyClient: any = require('legacy-untyped-sdk');
+  ```
+  ```javascript
+  // Folder-scoped exception (eslint.config.mjs)
+  {
+    files: ['src/db/**/*.ts', 'src/db/**/*.tsx'],
+    rules: { '@typescript-eslint/no-explicit-any': 'warn' },
+  },
   ```
 
 ### [TS-LINT-006] Importing specific functions
