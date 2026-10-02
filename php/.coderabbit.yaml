@@ -42,7 +42,7 @@ reviews:
     phpmd:
       enabled: true
     phpcs:
-      enabled: true
+      enabled: false
     yamllint:
       enabled: true
     gitleaks:
