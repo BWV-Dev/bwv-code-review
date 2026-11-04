@@ -46,7 +46,7 @@ These rules assume **PHP 8.5** (Laravel 13 / CakePHP 5.4).
 
 ### [PHP-NAMING-002] Functions, Properties and Variables
 - **Severity**: REQUIRED
-- **Description**: Use camelCase for functions, methods, properties and variables. Function and method names should start with a verb.
+- **Description**: Use camelCase for functions, methods, properties and variables.
 - **Examples**:
   ```php
   // Bad
@@ -100,6 +100,29 @@ These rules assume **PHP 8.5** (Laravel 13 / CakePHP 5.4).
   $canResize = false;
   $shouldConfirm = true;
   $enabled = true;
+  ```
+
+### [PHP-NAMING-006] Start Function and Method Names with a Verb
+- **Severity**: RECOMMENDED
+- **Description**: Function and method names should start with a verb. Exception: names that PHP or the framework defines or calls by name, such as controller actions (`index`), Eloquent relationships (`posts`), accessors returning `Attribute`, framework hooks (`casts`, `rules`, `definition`, `up`, `down`, `validationDefault`, `beforeFilter`) and interface methods (`current`, `key`). Renaming them breaks the code that calls them.
+- **Examples**:
+  ```php
+  // Bad
+  public function userName(): string {}
+
+  // Good 👍
+  public function getUserName(): string {}
+  public function sendInvoice(Invoice $invoice): void {}
+
+  // Good 👍 names the framework calls (keep them)
+  // Laravel
+  public function index(): View {}             // Route::resource() action
+  public function posts(): HasMany {}          // $user->posts, with('posts')
+  protected function firstName(): Attribute {} // accessor of first_name
+  protected function casts(): array {}
+
+  // CakePHP
+  public function validationDefault(Validator $validator): Validator {}
   ```
 
 ## 2. Styling & Types
@@ -828,14 +851,17 @@ These rules assume **PHP 8.5** (Laravel 13 / CakePHP 5.4).
 Focus heavily on these principles during review. Prioritize readability and maintainability over cleverness.
 
 - **[CLEAN-DRY] Don't Repeat Yourself**:
+  - **Severity: RECOMMENDED**.
   - Detect duplicated logic across files or functions.
   - Suggest extracting repeated code into reusable utility functions, traits, or service classes.
 
 - **[CLEAN-KISS] Keep It Simple**:
+  - **Severity: RECOMMENDED**.
   - Flag over-engineered solutions.
   - Suggest the simplest implementation possible.
 
 - **[CLEAN-YAGNI] You Aren't Gonna Need It**:
+  - **Severity: RECOMMENDED**.
   - Strict check on unused parameters, dead code, or "future-proofing" features that are not currently used.
   - Suggest removing fields in Classes/Interfaces that serve no immediate purpose.
 
