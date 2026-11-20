@@ -1,166 +1,67 @@
-# Guide to Using CodeRabbit and the Code Review Process
+# Code review workflow
 
-## Summary Workflow
+Use this workflow for pull requests (PRs) between branches in the same repository. Complete project setup once. For each PR, the Member requests review. The Reviewer runs `bwv-code-review` and requests the BWV Workflows security review before deciding whether to approve the PR.
 
-1. [**CodeRabbit Account Management** - Create account, notify the team](#1-coderabbit-account-management)
-2. [**Reviewer Configures CodeRabbit** - Check and update config for the project](#2-reviewer-configures-coderabbit)
-3. [**Member Codes and Review Locally** - Install extension, run CodeRabbit locally before pushing](#3-member-codes-and-reviews-locally)
-4. [**Member Creates Pull Request** - Re-check CodeRabbit feedback on the Pull Request](#4-member-creates-pull-request)
-5. [**Reviewer Review the Pull Request** - Evaluate the code and CodeRabbit feedback](#5-reviewer-reviews-the-pull-request)
-6. [**Member Fixes Based on Feedback** - Fix code based on feedback (repeat steps 4-5 if needed)](#6-member-fixes-based-on-feedback)
+| Step | Responsible | Action |
+| --- | --- | --- |
+| 1 | Reviewer and Project Leader | [Prepare the project](#1-prepare-the-project) |
+| 2 | Reviewer | [Review the PR with the skill](#2-review-the-pr-with-the-skill) |
+| 3 | Reviewer | [Request a security review on the PR](#3-request-a-security-review-on-the-pr) |
+| 4 | Reviewer and Member | [Resolve feedback and verify fixes](#4-resolve-feedback-and-verify-fixes) |
 
-## Detailed Steps
+## 1. Prepare the project
 
-### 1. CodeRabbit Account Management
+**Reviewer.** Adapt the [Node.js](nodejs/CODING_STANDARDS.md) or [PHP](php/CODING_STANDARDS.md) template and commit it as `CODING_STANDARDS.md` at the project root. Sign in to GitHub CLI (`gh`) and install the skill from the project root. See the [Skills Hub installation guide](https://github.com/BWV-Dev/bwv-skills-hub/blob/HEAD/docs/install.md).
 
-👤 Responsible: Management Level
-
-- Create a CodeRabbit account and purchase a subscription plan.
-- Connect CodeRabbit to the repository.
-- Add the Project Leader account with the Admin role.
-
-👤 Responsible: Project Leader
-
-- Add project members' account with the Member role.
-- Notify all team members about using CodeRabbit.
-- Management seat assignment for members.
-
-> **Note**: Currently used only for projects under the `briswell-ltd` organization.
-
-### 2. Reviewer Configures CodeRabbit
-
-👤 Responsible: Reviewer.
-
-- Check the `.coderabbit.yaml` file in the repository.
-- Copy the appropriate coding standards template (`nodejs/CODING_STANDARDS.md` or `php/CODING_STANDARDS.md`) to the project root as `CODING_STANDARDS.md`, then update it to match the project's conventions.
-  + Remove rules already enforced by ESLint or another project linter to avoid duplicate feedback from CodeRabbit.
-- Update configuration to match the project. Mainly focus on:
-  + path_filters: Define which files CodeRabbit should review or ignore.
-  + path_instructions: Add instructions for CodeRabbit based on specific rules (if needed).
-  + pre_merge_checks: Adjust naming rules for Pull Request titles (if needed).
-  + knowledge_base: Ensure `filePatterns` under `code_guidelines` includes `CODING_STANDARDS.md`. Update it when adding other guideline files.
-
-### 3. Member Codes and Reviews Locally
-
-👤 Responsible: Member.
-
-#### 3.1. Install and Use the CodeRabbit Extension
-
-- Install the CodeRabbit extension for VSCode or Cursor.
-- Run a CodeRabbit review locally after completing a part or the whole feature.
-- Do not create a Pull Request (Ready for review) without running a local review first.
-
-Note: 
-- Only review repositories that are authorized to use CodeRabbit. Do not use CodeRabbit to review personal repositories or repositories that are not on the approved list.
-
-- Local reviews may hit the rate limit, so only run them when necessary. If you encounter an error, wait a few minutes and try again.
-
-#### 3.2. Handle Issues by Priority Level
-
-The priority levels are:
-
-    🔴 CRITICAL - Severe issues that could cause system failures, security breaches, or data loss.
-    🟠 MAJOR - Significant problems that impact functionality or performance.
-    🟡 MINOR - Issues that should be addressed but don't critically impact the system.
-    🔵 TRIVIAL - Low-impact suggestions for code quality improvements.
-    ⚪ INFO - Informational comments or context without requiring action.
-
-##### CRITICAL and CODING_STANDARD (MANDATORY)
-
-- All issues of these types must be fixed.
-- If unsure how to fix a CRITICAL issue → Ask the Project Leader before creating a Pull Request.
-- Do not create a Pull Request if any CRITICAL issues or CODING_STANDARD violations remain.
-
-##### MAJOR / MINOR / TRIVIAL (RECOMMENDED)
-
-Not mandatory to fix immediately.
-Consider fixing if:
-
-  + The fix is clear.
-  + The suggestion is reasonable and improves code quality.
-  + If unsure → Ask the Project Leader.
-
-#### 3.3. Re-check the Entire Code Against Coding Rules
-
-### 4. Member Creates Pull Request
-
-👤 Responsible: Member.
-
-#### 4.1. Re-check on the Pull Request
-
-- After creating the Pull Request, apply the `coderabbit-review` label so CodeRabbit can review it automatically.
-
-  **Mandatory**: Any remaining CODING_STANDARD or CRITICAL issues must be fixed.
-
-#### 4.2. Communicate with CodeRabbit
-
-Note: Always use English when communicating with CodeRabbit.
-
-Guidelines for communication:
-
-- Provide accurate information about project rules.
-- Explain clearly and specifically.
-- Do not provide incorrect information, as CodeRabbit will "learn" and apply it in future reviews.
-
-Example: CodeRabbit review
-```
-⚠️ Potential issue | 🟠 Minor
-The variable name `_` doesn't follow naming conventions. 
-Variable names should not start with underscore. Consider renaming to `type`.
-
-Suggested change:
-- const { type: _, ...rest } = formModel;
-+ const { type, ...rest } = formModel;
+```sh
+npx skills add BWV-Dev/bwv-skills-hub --skill bwv-code-review
 ```
 
-Correct feedback:
-```
-@coderabbit This variable follows our team's naming convention for unused variables.
-We use underscore (_) for values that are intentionally destructured but not used.
-```
+**Project Leader.** Connect the repository to BWV Workflows and request access to the security-review recipe. Add the workflow below to `.bwv/workflows.yml` on each target branch, replacing `develop` with the branch name. See the [onboarding guide](https://bwv-dev.github.io/bwv-workflows-docs/getting-started/onboard-repository) and [recipe](https://bwv-dev.github.io/bwv-workflows-docs/recipes/security-review).
 
-Incorrect feedback:
-```
-@coderabbit This is wrong.
-❌ (No clear explanation)
+```yaml
+version: 1
 
-@coderabbit We use snake_case for everything.
-❌ (Incorrect - CodeRabbit will learn bad information)
-```
-
-### 5. Reviewer Reviews the Pull Request
-
-👤 Responsible: Reviewer.
-
-Review CodeRabbit's suggestions and classify them:
-
-- Valid: Keep them for the member to fix.
-- Invalid: Reject and provide a clear explanation so CodeRabbit can "learn".
-
-Example of good feedback:
-```
-@coderabbit This suggestion doesn't apply. We use camelCase 
-for all variable names according to our CODING_STANDARDS.md.
+workflows:
+  - name: security-review
+    on:
+      manual:
+        pull_request:
+          base: [develop]
+    pullRequestBase: true
+    onSuccess:
+      comment: ${{ steps.review_report.output.markdown }}
+    steps:
+      - id: review
+        uses: BWV-Dev/bwv-workflows-recipes/recipes/security-review/v1/review.yml@security-review/v1.0.1
 ```
 
-Examples of feedback to avoid:
+## 2. Review the PR with the skill
+
+**Reviewer.** Once the Member requests review, open the agent in the project repository. Enter the following command in the agent chat, replacing `123` with the open PR number. The skill reads `CODING_STANDARDS.md` from the root of the reviewed commit. To review against a specification, use `--doc` with the specification text or a file path.
+
+```text
+/bwv-code-review 123
 ```
-This review is wrong. ❌
-Not applicable. ❌
+
+The skill returns its findings in the agent chat and asks which ones to post. Make that selection after validating the findings in step 4.
+
+## 3. Request a security review on the PR
+
+**Reviewer.** Using an account with repository write access, post this command in the open PR conversation.
+
+```text
+/bwv run security-review
 ```
 
-Note: The reviewer will also perform manual review and provide feedback for the member to fix.
-Additionally, the reviewer may communicate further with CodeRabbit (using English).
+Follow the run in the `bwv/security-review` check. Read the separate **Security review** comment for the reviewed head commit and findings by severity. The check can pass with open findings. If the run fails, inspect the failed step, address the cause, and use **Retry**. If it passes but the report is missing, check the status comment for a posting error and verify `onSuccess.comment` on the base branch before requesting another run.
 
-If CodeRabbit repeatedly reviews a rule incorrectly, the reviewer must update the instruction and `knowledge_base` sections in the `.coderabbit.yaml` file of the project.
+## 4. Resolve feedback and verify fixes
 
-### 6. Member Fixes Based on Feedback
+**Reviewer.** Check the findings and post only those that require a fix on the PR.
 
-👤 Responsible: Member.
+**Member.** Apply the agreed fixes, run the relevant tests, and push the changes.
 
-Apply the reviewer's feedback as usual and push the updated code. At this point:
+**After a push.** The Reviewer runs `bwv-code-review` on the updated PR and posts `/bwv run security-review` again. Each run produces a separate report on success.
 
-  - CodeRabbit will automatically review the new changes (Step 4).
-  - The reviewer will check again until all requirements are met (Step 5).
-
-Repeat until all feedback has been addressed and the Pull Request is merged.
+**Reviewer.** Verify the requested fixes, including all confirmed `CRITICAL` findings and those tagged `CODING_STANDARD`. Approve once both reviews cover the latest PR commit and the fixes are complete. Check the head commit shown in the latest security report before approving.
