@@ -33,7 +33,7 @@ workflows:
       comment: ${{ steps.review_report.output.markdown }}
     steps:
       - id: review
-        uses: BWV-Dev/bwv-workflows-recipes/recipes/security-review/v1/review.yml@security-review/v1.0.1
+        uses: BWV-Dev/bwv-workflows-recipes/recipes/security-review/v1/review.yml@security-review/v1
 ```
 
 ## 2. Review the PR with the skill
